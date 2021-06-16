@@ -1,0 +1,72 @@
+<script lang="ts">
+	export let vehicle: Vehicle;
+
+	const {
+		ModelYear,
+		Make,
+		Model,
+		Trim,
+		Doors,
+		BodyClass,
+		DisplacementL,
+		FuelTypePrimary,
+		EngineCylinders,
+		EngineConfiguration,
+		DriveType,
+		PlantCity,
+		PlantCountry
+	} = vehicle;
+</script>
+
+<section>
+	<img src={`logos/${Make.toLowerCase()}-logo.png`} alt={Make} />
+	<h1>{ModelYear} {Make} {Model} {Trim}</h1>
+	<p>{Doors} {BodyClass}</p>
+</section>
+
+{#if DisplacementL || EngineCylinders}
+	<section>
+		<h2>Engine</h2>
+		<p>
+			{DisplacementL} Liter
+			{EngineConfiguration === 'V-Shaped' ? 'V' : `${EngineConfiguration}`}{EngineCylinders}
+		</p>
+		<p>{FuelTypePrimary}</p>
+	</section>
+{/if}
+
+{#if DriveType}
+	<section>
+		<h2>DriveTrain</h2>
+		<p>{DriveType}</p>
+	</section>
+{/if}
+
+{#if PlantCountry}
+	<section class="plant">
+		<p>Built in {PlantCity}, {PlantCountry}</p>
+	</section>
+{/if}
+
+<style>
+	h1,
+	h2 {
+		margin: 0;
+	}
+    h1 {
+        font-size: 32px;
+        line-height: 1.3;
+    }
+    h2 {
+        font-size: 25px;
+        line-height: 1.3;
+    }
+	p {
+		margin: 0;
+	}
+    .plant p {
+        font-size: 25px;
+        margin-top: 40px;
+        font-weight: 700;
+    }
+</style>
