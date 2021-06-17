@@ -2,6 +2,7 @@
 	let value = '';
 	let vehicle: Vehicle;
 
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import nhtsa from '$lib/nhtsa';
 	import Results from '$lib/Results.svelte';
@@ -10,6 +11,7 @@
 	async function handleChange() {
 		if (value.length === 17) {
 			vehicle = await nhtsa.getVehicle(value);
+			goto(`/?vin=${value}`);
 		} else {
 			vehicle = null;
 		}
