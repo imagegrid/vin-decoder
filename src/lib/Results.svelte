@@ -19,7 +19,9 @@
 </script>
 
 <section>
-	<img src={`logos/${Make.toLowerCase()}-logo.png`} alt={Make} />
+	{#if Make}
+		<img src={`logos/${Make.toLowerCase()}-logo.png`} alt={Make} />
+	{/if}
 	<h1>{ModelYear} {Make} {Model} {Trim}</h1>
 	<p>{Doors} {BodyClass}</p>
 </section>
@@ -28,8 +30,8 @@
 	<section>
 		<h2>Engine</h2>
 		<p>
-			{DisplacementL} Liter
-			{EngineConfiguration === 'V-Shaped' ? 'V' : `${EngineConfiguration}`}{EngineCylinders}
+			{parseFloat(DisplacementL) ? parseFloat(DisplacementL).toFixed(2) : DisplacementL} Liter
+			{EngineConfiguration === 'V-Shaped' ? 'V' : `${EngineConfiguration} `}{EngineCylinders}
 		</p>
 		<p>{FuelTypePrimary}</p>
 	</section>
@@ -51,22 +53,22 @@
 <style>
 	h1,
 	h2 {
-		margin: 0;
+		margin: 0.25em;
 	}
-    h1 {
-        font-size: 32px;
-        line-height: 1.3;
-    }
-    h2 {
-        font-size: 25px;
-        line-height: 1.3;
-    }
+	h1 {
+		font-size: 32px;
+		line-height: 1.2;
+	}
+	h2 {
+		font-size: 25px;
+		line-height: 1.2;
+	}
 	p {
 		margin: 0;
 	}
-    .plant p {
-        font-size: 25px;
-        margin-top: 40px;
-        font-weight: 700;
-    }
+	.plant p {
+		font-size: 25px;
+		margin: 40px 0;
+		font-weight: 700;
+	}
 </style>

@@ -1,0 +1,6 @@
+<slot/>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+	@import url('../app.css');
+</style>

@@ -1,103 +1,49 @@
 <script lang="ts">
 	let value = '';
 	let vehicle: Vehicle;
+	let history: History;
 
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import nhtsa from '$lib/nhtsa';
+	import Loading from '$lib/Loading.svelte';
 	import Results from '$lib/Results.svelte';
-	import { onMount } from 'svelte';
+	import History from '$lib/History.svelte';
+	import Input from '$lib/Input.svelte';
+	import nhtsa from '$lib/nhtsa';
 
-	async function handleChange() {
-		if (value.length === 17) {
-			vehicle = await nhtsa.getVehicle(value);
-			goto(`/?vin=${value}`);
-		} else {
-			vehicle = null;
+	async function handleChange(val: string) {
+		if (val) {
+			val = val.replace(/[\W_]*/g, '');
+			value = val.toUpperCase();
+			if (val.length === 17) {
+				vehicle = null;
+				vehicle = await nhtsa.getVehicle(val);
+				console.log(vehicle);
+
+				history.addHistory(val);
+			} else {
+				vehicle = null;
+			}
 		}
 	}
-	function clearInput() {
+
+	function clear() {
 		value = '';
 		vehicle = null;
 	}
 
-	onMount(() => {
-		if ($page.query.has('vin')) {
-			value = $page.query.get('vin');
-			handleChange();
-		}
-	});
+	$: if (value) {
+		handleChange(value);
+	}
 </script>
 
-<section class="input-section">
-	<div class="input-container">
-		<input
-			class="input"
-			type="text"
-			bind:value
-			on:input={handleChange}
-			placeholder="Enter Vin Number"
-		/>
-		{#if value.length > 0}
-			<a href={''} class="input-icon" on:click={clearInput}><img src="/x.svg" alt="Clear" /></a>
-		{/if}
-	</div>
-	{#if value.length !== 17}
-		<div class="input-count" class:warning={value.length > 17}>
-			{value.length} / 17
-		</div>
-	{/if}
-</section>
+<Input bind:value on:clear={clear} />
 
 {#if vehicle}
 	<Results {vehicle} />
+{:else if value.length === 17}
+	<Loading />
 {/if}
 
-<style>
-	@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
-	@import url('../app.css');
+<History bind:this={history} bind:value />
 
-	.input-section {
-		display: flex;
-		justify-content: center;
-		flex-wrap: wrap;
-		margin: 10px;
-	}
-	.input-container {
-		position: relative;
-		width: 300px;
-	}
-	.input {
-		font-size: 150%;
-		padding: 12px;
-		border-radius: 5px;
-		border: 1px solid rgb(128, 128, 128);
-	}
-	.input-icon {
-		display: block;
-		background-color: rgb(212, 212, 212);
-		padding: 4px;
-		margin: 0;
-		border-radius: 30px;
-		width: 18px;
-		height: 18px;
-		right: 25px;
-		top: 15px;
-		position: absolute;
-	}
-	.input-icon:hover {
-		background-color: rgb(177, 177, 177);
-	}
-	.input-icon img {
-		width: 18px;
-		height: 18px;
-	}
-	.input-count {
-		margin-top: 10px;
-		width: 100%;
-	}
-	.warning {
-		font-weight: 700;
-		color: red;
-	}
+<style>
 </style>
