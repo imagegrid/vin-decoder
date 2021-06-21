@@ -16,9 +16,14 @@
 			if (val.length === 17) {
 				vehicle = null;
 				vehicle = await nhtsa.getVehicle(val);
-				console.log(vehicle);
-
-				history.addHistory(val);
+				if (vehicle.ErrorCode === '0') {
+					history.addHistory({
+						ModelYear: vehicle.ModelYear,
+						Make: vehicle.Make,
+						Model: vehicle.Model,
+						Vin: val
+					});
+				}
 			} else {
 				vehicle = null;
 			}
@@ -44,6 +49,3 @@
 {/if}
 
 <History bind:this={history} bind:value />
-
-<style>
-</style>

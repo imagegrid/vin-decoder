@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	export let value;
+	export let value: string;
 
-	let history = [];
+	let history: HistoryItem[] = [];
 
-	export function addHistory(val: string) {
-		history = history.filter((e) => e !== val);
-		history = [val, ...history];
+	export function addHistory(item: HistoryItem) {
+		history = history.filter((e) => e.Vin !== item.Vin);
+		history = [item, ...history];
 		localStorage.setItem('history', JSON.stringify(history));
 	}
 	function clearHistory() {
@@ -22,17 +22,13 @@
 
 <section class="last-viewed">
 	<h2>Vin Search History</h2>
-	{#each history as vin}
+	{#each history as item}
 		<ul>
 			<li>
-				<a
-					href={''}
-					on:click={() => {
-						value = vin;
-					}}
-				>
-					{vin}
-				</a>
+				{item.ModelYear}
+				{item.Make}
+				{item.Model} -
+				<a href={''} on:click={() => (value = item.Vin)}>{item.Vin}</a>
 			</li>
 		</ul>
 	{/each}

@@ -2,6 +2,7 @@
 type Vehicle = {
 
     Make: string;
+    ErrorCode: string;
     ModelYear?: string;
     Model?: string;
     Trim?: string;
@@ -14,6 +15,12 @@ type Vehicle = {
     EngineCylinders?: string;
     EngineConfiguration?: string;
     DriveType?: string;
-
     [key: string]: string;
+};
+
+type HistoryItem = {
+    ModelYear: string;
+    Make: string;
+    Model: string;
+    Vin: string;
 };

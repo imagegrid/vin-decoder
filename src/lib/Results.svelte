@@ -14,10 +14,14 @@
 		EngineConfiguration,
 		DriveType,
 		PlantCity,
-		PlantCountry
+		PlantCountry,
+		ErrorCode
 	} = vehicle;
 </script>
 
+{#if ErrorCode !== '0'}
+	<p>Vin not found</p>
+{/if}
 <section>
 	{#if Make}
 		<img src={`logos/${Make.toLowerCase()}-logo.png`} alt={Make} />
