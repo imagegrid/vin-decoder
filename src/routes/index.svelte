@@ -9,25 +9,27 @@
 	import Input from '$lib/Input.svelte';
 	import nhtsa from '$lib/nhtsa';
 
-	async function handleChange(val: string) {
-		if (val) {
-			val = val.replace(/[\W_]*/g, '');
-			value = val.toUpperCase();
-			if (val.length === 17) {
-				vehicle = null;
-				vehicle = await nhtsa.getVehicle(val);
-				if (vehicle.ErrorCode === '0') {
-					history.addHistory({
-						ModelYear: vehicle.ModelYear,
-						Make: vehicle.Make,
-						Model: vehicle.Model,
-						Vin: val
-					});
-				}
-			} else {
-				vehicle = null;
+	async function getVehicle(vin: string) {
+		vehicle = null;
+		if (vin) {
+			if (vin.length === 17) {
+				vehicle = await nhtsa.getVehicle(vin);
+				addHistory(vehicle);
 			}
 		}
+	}
+	function addHistory(vehicle: Vehicle) {
+		if (vehicle && vehicle.ErrorCode === '0') {
+			history.addHistory({
+				ModelYear: vehicle.ModelYear,
+				Make: vehicle.Make,
+				Model: vehicle.Model,
+				Vin: vehicle.VIN
+			});
+		}
+	}
+	function historyClicked(e) {
+		value = e.detail;
 	}
 
 	function clear() {
@@ -35,9 +37,7 @@
 		vehicle = null;
 	}
 
-	$: if (value) {
-		handleChange(value);
-	}
+	$: getVehicle(value);
 </script>
 
 <Input bind:value on:clear={clear} />
@@ -48,4 +48,4 @@
 	<Loading />
 {/if}
 
-<History bind:this={history} bind:value />
+<History bind:this={history} on:clicked={historyClicked} />

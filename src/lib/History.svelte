@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
-	export let value: string;
+	const dispatch = createEventDispatcher();
 
 	let history: HistoryItem[] = [];
 
@@ -9,6 +10,10 @@
 		history = history.filter((e) => e.Vin !== item.Vin);
 		history = [item, ...history];
 		localStorage.setItem('history', JSON.stringify(history));
+	}
+	function formatVin(value: string): string {
+		let vin = value.replace(/[\W_]*/g, '');
+		return vin.toUpperCase();
 	}
 	function clearHistory() {
 		history = [];
@@ -28,7 +33,7 @@
 				{item.ModelYear}
 				{item.Make}
 				{item.Model} -
-				<a href={''} on:click={() => (value = item.Vin)}>{item.Vin}</a>
+				<a href={''} on:click={() => dispatch('clicked', item.Vin)}>{formatVin(item.Vin)}</a>
 			</li>
 		</ul>
 	{/each}
