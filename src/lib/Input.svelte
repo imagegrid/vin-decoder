@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	export let value;
+	export let value: string;
 
 	const dispatch = createEventDispatcher();
 
